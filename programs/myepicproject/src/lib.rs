@@ -13,8 +13,15 @@ pub mod myepicproject {
         Ok(())
     }
 
-    pub fn add_gif(ctx: Context<AddGif>) -> ProgramResult {
+    pub fn add_gif(ctx: Context<AddGif>, url : String ) -> ProgramResult {
         let base_account = &mut ctx.accounts.base_account;
+
+        let item = Gif {
+            gif_url: url.to_string(),
+            user_address: *base_account.to_account_info().key
+        };
+        
+        base_account.gif_list.push(item);
         base_account.total_gifs += 1;
 
         Ok(())
@@ -53,4 +60,13 @@ pub struct Initialize<'info> {
 #[account]
 pub struct BaseAccount {
     pub total_gifs: u64,
+    // Attach a Vector of type ItemStruct to the account.
+    pub gif_list : Vec<Gif>
+}
+
+//Creating a custom struct for us to work with 
+#[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
+pub struct Gif {
+    pub gif_url : String,
+    pub user_address : Pubkey
 }
