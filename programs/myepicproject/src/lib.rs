@@ -20,7 +20,7 @@ pub mod myepicproject {
             gif_url: url.to_string(),
             user_address: *base_account.to_account_info().key
         };
-        
+
         base_account.gif_list.push(item);
         base_account.total_gifs += 1;
 
@@ -65,6 +65,11 @@ pub struct BaseAccount {
 }
 
 //Creating a custom struct for us to work with 
+//Basically this tells Anchor how to serialize/deserialize the struct.
+//Remember, data is being stored in an "account" right ? That account is basically a file and we serialize our data into binary 
+//format before storing it.Then, when we want to retrieve it we'll actually deserialize it.
+//This line takes care of that to make sure our data is properly serialized/deserialized since we're creating a custom struct here.
+
 #[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct Gif {
     pub gif_url : String,

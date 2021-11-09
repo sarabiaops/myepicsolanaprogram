@@ -13,6 +13,8 @@ const main = async() => {
   //why are we doing this ? Well, basically it's because we need to create some credentials for the BaseAccount we're creating.
   const baseAccount = anchor.web3.Keypair.generate();
 
+  console.log(provider.wallet.publicKey.toString());
+
   const tx = await program.rpc.initialize({
     accounts: {
       baseAccount: baseAccount.publicKey,
@@ -28,16 +30,16 @@ const main = async() => {
   let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
   console.log('👀 GIF Count', account.totalGifs.toString())
 
-  const gif = await program.rpc.addGif({
+  const gif = await program.rpc.addGif("https://giphy.com/embed/jJjb9AUHOiP3nJJMdy/video",{
     accounts: {
       baseAccount: baseAccount.publicKey
     }
   })
 
   account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-  console.log('👀 GIF Count', account.totalGifs.toString())
-
-
+  // console.log(account);
+  console.log('👀 GIF Count', account.totalGifs.toString());
+  console.log('👀 GIF List', account.gifList);
 }
 
 const runMain = async () => {
